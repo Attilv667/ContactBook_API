@@ -6,7 +6,10 @@ const apiResponse = require("../utils/apiResponse");
  // @route   GET /api/v1/contacts
  // @access  Public
 exports.getContacts = asyncHandler(async (req, res, next) => {
-    const contacts = await Contact.find();
+    const contacts = await Contact.find().populate({
+        path: "category",
+        select: "name -_id",
+    });
     return apiResponse.success("Contacts récupérés avec succès", contacts).send(res);
 });
 
@@ -15,7 +18,10 @@ exports.getContacts = asyncHandler(async (req, res, next) => {
  // @access  Public
 exports.getContact = asyncHandler(async (req, res, next) => {
     const contactID = req.params.id;
-    const contact = await Contact.findById(contactID);
+    const contact = await Contact.findById(contactID).populate({
+        path: "category",
+        select: "name -_id",
+    });;
     if (!contact) {
         return apiResponse.error("Contact non trouvé", 404).send(res);
     }

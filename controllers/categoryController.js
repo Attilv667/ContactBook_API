@@ -8,9 +8,12 @@ const ApiResponse = require("../utils/apiResponse");
 // @route   GET /api/v1/categories
 // @access  Public
 exports.getCategories = asyncHandler(async (req, res, next) => {
-    const categories = await Category.find();
-    return ApiResponse.success("Catégories récupérées avec succès",
-        categories
+    const categories = await Category.find(); 
+    const categoryCount = await Category.countDocuments();
+    return ApiResponse.success("Catégories récupérées avec succès",{
+        Nombre: categoryCount,
+        categories: categories
+    }
     ).send(res);
     });
 
